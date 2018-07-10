@@ -39,9 +39,23 @@ app.post('/signin', (req, res) => {
     }
 });
 
+app.post('/register', (req, res) => {
+    const { email, name, password} = req.body;
+    db.users.push({
+        id: db.users[db.users.length-1].id + 1,
+        email: email,
+        password: password,
+        name: name,
+        entries: 0,
+        joined: new Date()
+    })
+    res.json(db.users[db.users.length-1])
+    console.log(db)
+});
+
 app.listen(3007, () => {
     console.log('app is running on port 3007');
-})
+});
 
 /* API design
    / (root route) --> GET
