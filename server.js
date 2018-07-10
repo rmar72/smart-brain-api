@@ -3,6 +3,20 @@ const   express = require('express'),
 
 const app = express();
 
+//Mock DB
+const db = {
+    users: [
+        {
+            email: "jChan@gmail.com",
+            password: "talismanKing"
+        },
+        {
+            email: "jadeChan@gmail.com",
+            password: "talismanPrincess"
+        },
+    ]
+};
+
 app.get('/', (req, res) => {
     res.send('this is working')
 });
