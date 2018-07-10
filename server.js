@@ -53,6 +53,21 @@ app.post('/register', (req, res) => {
     console.log(db)
 });
 
+app.get('/profile/:id', (req, res) => {
+    let { id } = req.params;
+    let found = false;
+    db.users.forEach(user => {
+        if(user.id == Number(id)){
+            found = true;
+            return res.json(user);
+        }
+    });
+
+    if(!found){
+        res.status(404).json("User not found");
+    }
+});
+
 app.listen(3007, () => {
     console.log('app is running on port 3007');
 });
