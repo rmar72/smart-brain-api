@@ -3,6 +3,8 @@ const   express = require('express'),
 
 const app = express();
 
+app.use(bodyParser.json());
+
 //Mock DB
 const db = {
     users: [
@@ -18,7 +20,15 @@ const db = {
 };
 
 app.get('/', (req, res) => {
-    res.send('this is working')
+    res.send('this is working');
+});
+
+app.post('/signin', (req, res) => {
+    if(req.body.email === db.users[0].email && req.body.password === db.users[0].password){
+        res.json('success');
+    } else {
+        res.status(400).json("Wrong credentials, try again.");
+    }
 });
 
 app.listen(3007, () => {
