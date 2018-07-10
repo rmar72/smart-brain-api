@@ -9,12 +9,20 @@ app.use(bodyParser.json());
 const db = {
     users: [
         {
+            id:123,
             email: "jChan@gmail.com",
-            password: "talismanKing"
+            password: "talismanKing",
+            name: "Jackie",
+            entries: 0,
+            joined: new Date()
         },
         {
+            id:124,
             email: "jadeChan@gmail.com",
-            password: "talismanPrincess"
+            password: "talismanPrincess",
+            name: "Jade",
+            entries: 0,
+            joined: new Date()
         },
     ]
 };
