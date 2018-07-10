@@ -2,7 +2,6 @@ const   express = require('express'),
         bodyParser = require('body-parser');
 
 const app = express();
-
 app.use(bodyParser.json());
 
 //Mock DB
@@ -49,8 +48,7 @@ app.post('/register', (req, res) => {
         entries: 0,
         joined: new Date()
     })
-    res.json(db.users[db.users.length-1])
-    console.log(db)
+    res.json(db.users[db.users.length-1]);
 });
 
 app.get('/profile/:id', (req, res) => {
@@ -87,12 +85,3 @@ app.put('/image', (req, res) => {
 app.listen(3007, () => {
     console.log('app is running on port 3007');
 });
-
-/* API design
-   / (root route) --> GET
-   /signin --> POST
-   /register --> POST
-   /profile/:userId --> GET = user
-   /image --> PUT = user
-   
-*/
