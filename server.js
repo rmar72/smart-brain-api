@@ -45,7 +45,6 @@ app.post('/register', (req, res) => {
     db.users.push({
         id: db.users[db.users.length-1].id + 1,
         email: email,
-        password: password,
         name: name,
         entries: 0,
         joined: new Date()
