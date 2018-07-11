@@ -1,8 +1,10 @@
 const   express = require('express'),
         bodyParser = require('body-parser');
+        cors = require('cors')
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 //Mock DB
 const db = {
@@ -27,7 +29,7 @@ const db = {
 };
 
 app.get('/', (req, res) => {
-    res.send('this is working');
+    res.json(db);
 });
 
 app.post('/signin', (req, res) => {
