@@ -66,17 +66,12 @@ app.post('/register', (req, res) => {
 
 app.get('/profile/:id', (req, res) => {
     let { id } = req.params;
-    let found = false;
-    db.users.forEach(user => {
-        if(user.id == Number(id)){
-            found = true;
-            return res.json(user);
-        }
-    });
-
-    if(!found){
-        res.status(404).json("User not found");
-    }
+    pg_db.select('*').from('users').where({id})
+        .then(user => {
+            if(user.length) res.json(user[0])
+            else res.status(400).json('Not Found')
+        })
+        .catch(err => res.status(400).json('error getting user'));
 });
 
 app.put('/image', (req, res) => {
