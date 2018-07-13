@@ -3,7 +3,8 @@ const   express = require('express'),
         cors = require('cors'),
         knex = require('knex'),
         bcrypt = require('bcrypt-nodejs'),
-        register = require('./controllers/register')
+        register = require('./controllers/register'),
+        signIn = require('./controllers/signin')
         
 const pg_db = knex({
     client: 'pg',
@@ -23,26 +24,9 @@ app.get('/', (req, res) => {
     pg_db.select('*').from('users').then(users => res.json(users));
 });
 
-app.post('/signin', (req, res) => {
-    pg_db.select('email', 'hash').from('login')
-        .where('email', '=', req.body.email)
-        .then(data => {
-            const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
-            if(isValid) {
-                return pg_db.select('*').from('users')
-                    .where('email', '=', req.body.email)
-                    .then(user => {
-                        res.json(user[0])
-                    })
-                    .catch(err => res.status(400).json('unable to get user'))
-            } else {
-                res.status(400).json('wrong credentials')
-            }
-        })
-        .catch(err => res.status(400).json('wrong credentials'));
-});
+app.post('/signin', (req, res) => { signIn.handleSignIn(req, res, pg_db, bcrypt) } ); // nice use of dependency injection
 
-app.post('/register', (req, res) => { register.handleRegister(req, res, pg_db, bcrypt) } ); // nice use of dependency injection
+app.post('/register', (req, res) => { register.handleRegister(req, res, pg_db, bcrypt) } ); 
 
 app.get('/profile/:id', (req, res) => {
     let { id } = req.params;
