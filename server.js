@@ -18,30 +18,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-//Mock DB
-const db = {
-    users: [
-        {
-            id:123,
-            email: "jChan@gmail.com",
-            password: "talismanKing",
-            name: "Jackie",
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id:124,
-            email: "jadeChan@gmail.com",
-            password: "talismanPrincess",
-            name: "Jade",
-            entries: 0,
-            joined: new Date()
-        },
-    ]
-};
-
 app.get('/', (req, res) => {
-    res.json(db);
+    pg_db.select('*').from('users').then(users => res.json(users));
 });
 
 app.post('/signin', (req, res) => {
