@@ -1,5 +1,8 @@
 const handleRegister =  (req, res, pg_db, bcrypt) => {
     const { email, name, password } = req.body;
+    if(!email || !name || !password){
+        return res.status(400).json('incorrect form');
+    }
     const hash = bcrypt.hashSync(password);
     
     pg_db.transaction(trx => {
@@ -26,6 +29,4 @@ const handleRegister =  (req, res, pg_db, bcrypt) => {
 }
 
 
-module.exports ={
-    handleRegister
-}
+module.exports = { handleRegister }
