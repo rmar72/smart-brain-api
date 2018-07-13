@@ -76,18 +76,13 @@ app.get('/profile/:id', (req, res) => {
 
 app.put('/image', (req, res) => {
     let { id } = req.body;
-    let found = false;
-    db.users.forEach(user => {
-        if(user.id == Number(id)){
-            found = true;
-            user.entries++;
-            return res.json(user.entries);
-        }
-    });
-
-    if(!found){
-        res.status(404).json("User not found");
-    }
+    pg_db('users').where('id', '=', id)
+        .increment('entries', 1)
+        .returning('entries')
+        .then(entries => {
+            res.json(entries[0]);
+        })
+        .catch(err => res.status(400).json('unable to get entries'));
 });
 
 app.listen(3007, () => {
