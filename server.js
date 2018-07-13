@@ -1,7 +1,8 @@
 const   express = require('express'),
         bodyParser = require('body-parser'),
         cors = require('cors'),
-        knex = require('knex');
+        knex = require('knex'),
+        bcrypt = require('bcrypt-nodejs')
         
 const pg_db = knex({
     client: 'pg',
@@ -52,16 +53,30 @@ app.post('/signin', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    const { email, name} = req.body;
-    pg_db('users')
-        .returning('*')
-        .insert({
-            name: name,
-            email: email,
-            joined: new Date()
+    const { email, name, password } = req.body;
+    const hash = bcrypt.hashSync(password);
+    
+    pg_db.transaction(trx => {
+        trx.insert({
+            hash: hash,
+            email: email
         })
+        .into('login')
+        .returning('email')
+        .then(loginEmail => {
+            return pg_db('users')
+            .returning('*')
+            .insert({
+                name: name,
+                email: loginEmail[0],
+                joined: new Date()
+            })
             .then(user => res.json(user[0]))
-            .catch(err => res.status(400).json('unable to register'));
+        })
+        .then(trx.commit)
+        .catch(trx.rollback)
+    })
+    .catch(err => res.status(400).json('unable to register'));
 });
 
 app.get('/profile/:id', (req, res) => {
