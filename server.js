@@ -33,6 +33,6 @@ app.get('/profile/:id', (req, res) => { profile.handleProfile(req, res, pg_db) }
 app.put('/image',  (req, res) => { image.handleImage(req, res, pg_db) } );
 app.post('/imageURL',  (req, res) => { image.handleApiCall(req, res) } );
 
-app.listen(3007, () => {
-    console.log('app is running on port 3007');
+app.listen(process.env.PORT || 3007, () => {
+    console.log('App is up and running!');
 });
