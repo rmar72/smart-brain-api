@@ -22,7 +22,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res) => pg_db.select('*').from('users').then(users => res.json(users)) );
+app.get('/', (req, res) => res.send('app is working') );
 
 app.post('/signin', (req, res) => { signIn.handleSignIn(req, res, pg_db, bcrypt) } ); // nice use of dependency injection
 
